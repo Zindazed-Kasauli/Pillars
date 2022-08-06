@@ -9,6 +9,12 @@
 	<title>dr_prescription_prescriptions</title>
 </head>
 <body>
-    <h1>dr_prescription_prescriptions</h1>
+    <div class="container-fluid p-5 bg-white text-success text-center">
+        <h1>dr_prescription_prescriptions</h1>
+        <p>Resize this responsive page to see the effect!</p> 
+        <h3><a href="{% url 'dr_stock' 'stock' %}">STOCK</a></h3>
+        <h3><a href="{% url 'dr_prescription' 'prescriptions' %}">PRESCRIPITON</a></h3>
+    </div>
+    <h3><a href="{% url 'dr_prescription' 'prescriptions' %}">Prescripitions</a></h3>
 </body>
 </html>

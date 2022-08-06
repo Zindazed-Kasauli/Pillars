@@ -9,6 +9,15 @@
 	<title>dsm_accounts_new_account</title>
 </head>
 <body>
-    <h1>dsm_accounts_new_account</h1>
+    <div class="container-fluid p-5 bg-white text-success text-center">
+        <h1>dsm_accounts_new_account</h1>
+        <p>Resize this responsive page to see the effect!</p> 
+		<h3><a href="{% url 'dsm_stock' 'stock' %}">STOCK</a></h3>
+		<h3><a href="{% url 'dsm_reports' 'reports' %}">REPORTS</a></h3>
+		<h3><a href="{% url 'dsm_accounts' 'accounts' %}">ACCOUNTS</a></h3>
+      </div>
+    
+    <h3><a href="{% url 'dsm_accounts' 'new_account' %}">New Account</a></h3>
+    <h3><a href="{% url 'dsm_accounts' 'edit_account' %}">Edit Account</a></h3>
 </body>
 </html>

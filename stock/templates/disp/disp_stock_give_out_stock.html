@@ -9,6 +9,18 @@
 	<title>disp_stock_give_out_stock</title>
 </head>
 <body>
-    <h1>disp_stock_give_out_stock</h1>
+    <div class="container-fluid p-5 bg-white text-success text-center">
+        <h1>disp_stock_give_out_stock</h1>
+        <p>Resize this responsive page to see the effect!</p> 
+        <h3><a href="{% url 'disp_stock' 'stock' %}">STOCK</a></h3>
+        <h3><a href="{% url 'disp_reports' 'reports' %}">REPORTS</a></h3>
+        <h3><a href="{% url 'disp_prescription' 'prescription' %}">PRESCRIPTION</a></h3>
+    </div>
+
+    <h3><a href="{% url 'disp_stock' 'request_stock' %}">Request Stock</a></h3>
+    <h3><a href="{% url 'disp_stock' 'search_stock' %}">Search Stock</a></h3>
+    <h3><a href="{% url 'disp_stock' 'give_out_stock' %}">Give Out Stock</a></h3>
+    <h3><a href="{% url 'disp_stock' 'adjustments_losses' %}">Adjustments & Losses</a></h3>
+    <h3><a href="{% url 'disp_stock' 'stock_price_list' %}">Stock Price List</a></h3>
 </body>
 </html>

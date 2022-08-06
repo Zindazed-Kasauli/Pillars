@@ -9,6 +9,16 @@
 	<title>dsm_reports_periodic_reports</title>
 </head>
 <body>
-    <h1>dsm_reports_periodic_reports</h1>
+    <div class="container-fluid p-5 bg-white text-success text-center">
+        <h1>dsm_reports_periodic_reports</h1>
+        <p>Resize this responsive page to see the effect!</p> 
+		<h3><a href="{% url 'dsm_stock' 'stock' %}">STOCK</a></h3>
+		<h3><a href="{% url 'dsm_reports' 'reports' %}">REPORTS</a></h3>
+		<h3><a href="{% url 'dsm_accounts' 'accounts' %}">ACCOUNTS</a></h3>
+      </div>
+    
+      <h3><a href="{% url 'dsm_reports' 'daily_report' %}">Daily Report</a></h3>
+      <h3><a href="{% url 'dsm_reports' 'periodic_reports' %}">Periodic Reports</a></h3>
+      <h3><a href="{% url 'dsm_reports' 'notifications' %}">Notifications</a></h3>
 </body>
 </html>

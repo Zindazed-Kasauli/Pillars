@@ -1,7 +1,7 @@
 from unicodedata import name
 from django.urls import path
 
-from stock import views_dsm
+from stock import views_dsm, views_disp, views_dr
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
@@ -17,6 +17,18 @@ urlpatterns = [
     name="login"),
   
     #sample url using slug routing
-    path('drug_store_manager/', views_dsm.drug_store_manager, name="drug_store_manager")
+    #drug store manager urls
+    path('dsm_stock/<slug:action>', views_dsm.dsm_stock, name="dsm_stock"),
+    path('dsm_accounts/<slug:action>', views_dsm.dsm_accounts, name="dsm_accounts"),
+    path('dsm_reports/<slug:action>', views_dsm.dsm_reports, name="dsm_reports"),
 
+    #doctor urls
+    path('dr_stock/<slug:action>', views_dr.dr_stock, name="dr_stock"),
+    path('dr_prescription/<slug:action>', views_dr.dr_prescription, name="dr_prescription"),
+
+    #dispenser urls
+    path('disp_stock/<slug:action>', views_disp.disp_stock, name="disp_stock"),
+    path('disp_reports/<slug:action>', views_disp.disp_reports, name="disp_reports"),
+    path('disp_prescription/<slug:action>', views_disp.disp_prescription, name="disp_prescription")
+   
 ]
