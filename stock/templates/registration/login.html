@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap5/css/bootstrap.css' %}">
+    <title>login</title>
+</head>
+<body>
+    <!-- nav bar  -->
+	<nav class="navbar navbar-light navbar-expand-lg" class="justify-content-center" style="background: #D9D9D9;">
+		<!-- STOCK, REPORTS AND ACCOUNTS header -->
+		<div class="container-fluid justify-content-center">
+			<button class="btn btn-lg me-4 text-white" type="button" style="background:#1D242E; width: 60%;">PILLARS MEDICAL CENTER</button>
+		</div>
+	</nav>
+
+    {% if form.errors %}
+   		 <p>there's some error</p>
+    {% endif %}
+
+    {% if next %}
+        <p>access denied</p>
+    {% endif %}
+
+	<!-- login  form-->
+	<div class="container border rounded mt-5 justify-content-center" style="border-color: #1D242E; width: 50%;"> 
+		<form action="{% url 'login' %}" method="post">
+			{% csrf_token %}
+			<!-- username -->
+			<div class="mb-3">
+			  <label for="username" class="form-label">Username: </label>
+			  {{form.username}} 
+			  <!-- <input type="text" class="form-control" id="usernameInput" placeholder="enter your username"> -->
+			</div>
+
+			<!-- password -->
+			<div class="mb-3">
+			  <label for="password" class="form-label">Password: </label>
+			  {{form.password}}
+			  <!-- <input type="password" class="form-control" id="inputPassword" placeholder="enter your password"> -->
+			</div>
+
+			<!-- login button -->
+			<div class="d-flex justify-content-center">
+				<button type="submit" class="btn text-white" style="background: #1D242E; width: 100px;">LOGIN</button>
+				<input type="hidden" name="next" value="{{next}}">
+			</div>
+		</form>
+		
+	</div>
+
+</body>
+</html>
+
+
+

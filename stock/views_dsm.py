@@ -13,7 +13,7 @@ def dsm_stock(request, action):
     elif action == "stock_batches":
         return render(request, 'dsm/dsm_stock_stock_batches.html')
     elif action == "adjustments":
-        return render(request, 'dsm/dsm_stock_adjustments.html')
+        return render(request, 'dsm/dsm_stock_adjustments_losses.html')
     elif action == "add_stock_item" or action == "stock":
         return render(request, 'dsm/dsm_stock_add_stock_item.html')
     else:
