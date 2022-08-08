@@ -7,22 +7,90 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'bootstrap5/css/bootstrap.css' %}">
+	<style>
+
+	</style>
 	<title>DSM - Stock - add stock item</title>
 </head>
 <body>
-	<div class="container-fluid p-5 bg-white text-success text-center">
-        <h1>DSM: STOCK : ADD STOCK ITEMS</h1>
-        <p>Resize this responsive page to see the effect!</p> 
-		<h3><a href="{% url 'dsm_stock' 'stock' %}">STOCK</a></h3>
-		<h3><a href="{% url 'dsm_reports' 'reports' %}">REPORTS</a></h3>
-		<h3><a href="{% url 'dsm_accounts' 'accounts' %}">ACCOUNTS</a></h3>
-      </div>
-	  <h3><a href="{% url 'dsm_stock' 'add_stock_item' %}">Add Stock Items</a></h3>
-	  <h3><a href="{% url 'dsm_stock' 'search_stock_item' %}">Search</a></h3>
-	  <h3><a href="{% url 'dsm_stock' 'requisitions' %}">Requisitions</a></h3>
-	  <h3><a href="{% url 'dsm_stock' 'give_out_stock' %}">Give Out Stock</a></h3>
-	  <h3><a href="{% url 'dsm_stock' 'stock_price_list' %}">Stock Price List</a></h3>
-	  <h3><a href="{% url 'dsm_stock' 'stock_batches' %}">Stock Batches</a></h3>
-	  <h3><a href="{% url 'dsm_stock' 'adjustments' %}">Adjustments & Losses</a></h3>
+	<!-- nav bar  -->
+	<nav class="navbar navbar-light navbar-expand-lg" class="justify-content-center" style="background: #D9D9D9;">
+		<!-- STOCK, REPORTS AND ACCOUNTS header -->
+		<div class="container-fluid justify-content-center">
+			<a class="nav-link active" aria-current="page" href="{% url 'dsm_stock' 'stock' %}"><button class="btn btn-lg me-2 text-white" type="button" style="background:#009099; width: 150px;">STOCK</button></a>
+			<a class="nav-link" href="{% url 'dsm_reports' 'reports' %}"><button class="btn  btn-lg me-2 text-white" type="button" style="background:#1D242E; width: 150px;">REPORTS</button></a>
+			<a class="nav-link" href="{% url 'dsm_accounts' 'accounts' %}"><button class="btn  btn-lg text-white" type="button" style="background:#1D242E; width: 150px;">ACCOUNTS</button></a>
+		</div>
+
+		<!-- log out -->
+		<div class="">
+			<a href="" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+			<!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
+		</div>
+	</nav>
+	<!-- end of navbar -->
+
+	<!-- everything below the navbar -->
+	<!-- sidebar and page content -->
+	<div class="container-fluid">
+		<div class="row">
+			<!-- sidebar -->
+			<div class=" col-2 d-flex flex-column flex-shrink-0 p-3 m-0 rounded-end" style="height: 100vh; background: #283342; color: white;">
+				<ul class="nav nav-pills flex-column mb-auto">
+					<!-- sidebar heading -->
+				  <li class="nav-item text-white" >
+			         <h3 class="m-0 text-white">STOCK</h3>
+			      </li>
+			      <hr style="color: white; width: 100%;" class="m-2">
+
+			      <!-- side bar items -->
+			      <li class="nav-item">
+			        <a href="{% url 'dsm_stock' 'add_stock_item' %}" class="nav-link active" style="background: #009099;" aria-current="page">
+			          Add Stock Items
+			        </a>
+			      </li>
+			      <li class="nav-item">
+			        <a href="{% url 'dsm_stock' 'search_stock_item' %}" class="nav-link text-white">
+			          Search
+			        </a>
+			      </li>
+			      <li>
+			        <a href="{% url 'dsm_stock' 'requisitions' %}" class="nav-link  text-white">
+			          Requisitions
+			        </a>
+			      </li>
+			      <li>
+			        <a href="{% url 'dsm_stock' 'give_out_stock' %}" class="nav-link  text-white">
+			          Give Out Stock
+			        </a>
+			      </li>
+			      <li>
+			        <a href="{% url 'dsm_stock' 'stock_price_list' %}" class="nav-link  text-white">
+			          Stock Price List
+			        </a>
+			      </li>
+			      <li>
+			        <a href="{% url 'dsm_stock' 'stock_batches' %}" class="nav-link  text-white">
+			          Stock Batches
+			        </a>
+			      </li>
+			      <li>
+			        <a href="{% url 'dsm_stock' 'adjustments' %}" class="nav-link text-white">
+			         Adjustments & Losses
+			        </a>
+			      </li>
+			    </ul>
+			</div>
+			<!-- end of sidebar -->
+
+			<!-- page content -->
+			<div class="col-10 bg-light">
+				<h1>page content goes here</h1>
+			</div>
+			<!-- end of page content -->
+		</div>
+		<!-- end of row -->
+	</div>
+	<!-- end of container fluid -->
 </body>
 </html>

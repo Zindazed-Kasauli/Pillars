@@ -9,15 +9,59 @@
 	<title>disp_report_daily_report</title>
 </head>
 <body>
-    <div class="container-fluid p-5 bg-white text-success text-center">
-        <h1>disp_report_daily_report</h1>
-        <p>Resize this responsive page to see the effect!</p> 
-        <h3><a href="{% url 'disp_stock' 'stock' %}">STOCK</a></h3>
-        <h3><a href="{% url 'disp_reports' 'reports' %}">REPORTS</a></h3>
-        <h3><a href="{% url 'disp_prescription' 'prescription' %}">PRESCRIPTION</a></h3>
-    </div>
+    <!-- nav bar  -->
+    <nav class="navbar navbar-light navbar-expand-lg" class="justify-content-center" style="background: #D9D9D9;">
+        <!-- STOCK, REPORTS AND ACCOUNTS header -->
+        <div class="container-fluid justify-content-center">
+            <a class="nav-link " href="{% url 'disp_stock' 'stock' %}"><button class="btn btn-lg me-2 text-white" type="button" style="background:#1D242E; width: 160px;">STOCK</button></a>
+            <a class="nav-link active" aria-current="page" href="{% url 'disp_reports' 'reports' %}"><button class="btn  btn-lg me-2 text-white" type="button" style="background:#009099; width: 160px;">REPORTS</button></a>
+            <a class="nav-link" href="{% url 'disp_prescription' 'prescription' %}"><button class="btn  btn-lg text-white" type="button" style="background:#1D242E; width: 160px;">PRESCRIPTION</button></a>
+        </div>
 
-    <h3><a href="{% url 'disp_reports' 'daily_report' %}">Daily Report</a></h3>
-    <h3><a href="{% url 'disp_reports' 'notifications' %}">Notifications</a></h3>
+        <!-- log out -->
+        <div class="">
+            <a href="" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+            <!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
+        </div>
+    </nav>
+    <!-- end of navbar -->
+    
+    <!-- everything below the navbar -->
+    <!-- sidebar and page content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- sidebar -->
+            <div class=" col-2 d-flex flex-column flex-shrink-0 p-3 m-0 rounded-end" style="height: 100vh; background: #283342; color: white;">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <!-- sidebar heading -->
+                  <li class="nav-item text-white" >
+                     <h3 class="m-0 text-white">REPORTS</h3>
+                  </li>
+                  <hr style="color: white; width: 100%;" class="m-2">
+
+                  <!-- side bar items -->
+                  <li class="nav-item">
+                    <a href="{% url 'disp_reports' 'daily_report' %}" class="nav-link active" style="background: #009099;" aria-current="page">
+                    Daily Report
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{% url 'disp_reports' 'notifications' %}" class="nav-link text-white">
+                    Notifications
+                    </a>
+                  </li>
+                </ul>
+            </div>
+            <!-- end of sidebar -->
+
+            <!-- page content -->
+            <div class="col-10 bg-light">
+                <h1>page content goes here</h1>
+            </div>
+            <!-- end of page content -->
+        </div>
+        <!-- end of row -->
+    </div>
+    <!-- end of container fluid -->
 </body>
 </html>
