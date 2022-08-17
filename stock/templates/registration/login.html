@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap5/css/bootstrap.css' %}">
     <title>login</title>
 </head>
 <body>
@@ -19,7 +21,7 @@
         {% csrf_token %}
         <p>Username: {{form.username}} </p>
         <p>password: {{form.password}} </p>
-
+        <input type="text" class="bg-primary">
         <button type="submit">login</button>
         <input type="hidden" name="next" value="{{next}}">
     </form>

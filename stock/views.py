@@ -37,6 +37,3 @@ def register(request):
     context = {'form':form}
     return render(request, 'registration/register.html', context)
 
-def log_out(request):
-    logout(request)
-    return redirect('index')
