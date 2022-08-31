@@ -1,20 +1,23 @@
 from unicodedata import name
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Account(models.Model):
-    name = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
+    user = models.ForeignKey(User, related_name="accounts", on_delete=models.CASCADE)
+    # name = models.CharField(max_length=200)
+    # password = models.CharField(max_length=200)
     role = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.name
+        return self.user.username
         pass
 
 class StockItem(models.Model):
     name = models.CharField(max_length=200)
     strength = models.CharField(max_length=200)
-    type = models.CharField(max_length=200)
+    drug_type = models.CharField(max_length=200)
     account = models.ForeignKey("Account", related_name="stockItem_accounts", on_delete=models.CASCADE) #account(dsm) enters stock item, also account(dispenser) requests for stock_item
     prescription = models.ForeignKey("Prescription", related_name="stockItem_prescriptions", on_delete=models.CASCADE)#stock_item receives Prescription
     dispensationPayment = models.ForeignKey("DispensationPayment", related_name="stockItem_dispensation_payments", on_delete=models.CASCADE) #dispensation payment has stock_items

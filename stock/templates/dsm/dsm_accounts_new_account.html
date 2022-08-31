@@ -20,7 +20,7 @@
 
         <!-- log out -->
         <div class="">
-            <a href="" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+            <a href="{% url 'logout' %}?next=/" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
             <!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
         </div>
     </nav>
@@ -57,6 +57,31 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+                <form action="{% url 'register' %}" method="post">
+                    {% csrf_token %}
+            
+                    <p>Username: {{form.username}} </p>
+                    <p>Enter password: {{form.password1}} </p>
+                    <p>Confirm password: {{form.password2}} </p>
+            
+                    <h4>Account Type:</h4>
+                    <input type="radio" name="role" value="Doctor" id="dr"><label for="dr">Doctor</label><br>
+                    <input type="radio" name="role" value="Drug Store Manager" id="dsm"><label for="dsm">Drug Store Manager</label><br>
+                    <input type="radio" name="role" value="Dispenser" id="disp"><label for="disp">Dispernser</label><br>
+                    <button type="submit">Register</button>
+                        
+                    <h4>Errors Found:</h4>
+                    {% if form.errors %}
+                    <ol>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                    <h6>Please Make on them an try again</h6>
+                </form>
             </div>
             <!-- end of page content -->
         </div>

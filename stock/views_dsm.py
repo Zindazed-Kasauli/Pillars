@@ -1,4 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
+from .models import *
+
 
 #drug store manager stock_views 
 def dsm_stock(request, action):
@@ -33,6 +37,39 @@ def dsm_reports(request, action):
 #drug store manager accounts views
 def dsm_accounts(request, action):
     if action == "new_account" or action == "accounts":
-        return render(request, 'dsm/dsm_accounts_new_account.html')
+        # registration page view
+        if request.method == 'POST':
+            role = request.POST['role']
+            #userCreationForm is a default registration form for creating new user
+            form = UserCreationForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data['username']
+
+                user = User.objects.get(username = username)
+                new_account = Account(
+                    user = user,
+                    role = role,
+                )
+                new_account.save()
+                # password = form.cleaned_data['password1']
+
+
+                # #authenticates user
+                # user = authenticate(username=username, password=password)
+
+                # #logins in user
+                # login(request, user)
+
+                # #redirects user to home page
+                # return redirect('index')
+                return render(request, 'dsm/dsm_accounts_edit_account.html')
+        else:
+            #nothing happens
+            form = UserCreationForm()
+        
+        context = {'form':form}
+        return render(request, 'dsm/dsm_accounts_new_account.html', context)
     else: #edit_account
         return render(request, 'dsm/dsm_accounts_edit_account.html')

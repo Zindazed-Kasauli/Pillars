@@ -7,9 +7,10 @@ def index(request):
     #redirects user to login if not logged in
     if not request.user.is_authenticated:
         return redirect('login')
-
+    form = UserCreationForm()
+    context = {'form':form}
     #redirects user to the home page
-    return render(request, "stock/index.html")
+    return render(request, "dsm/dsm_accounts_new_account.html",context)
 
 # registration page view
 def register(request):
@@ -35,5 +36,5 @@ def register(request):
         form = UserCreationForm()
     
     context = {'form':form}
-    return render(request, 'registration/register.html', context)
+    return render(request, 'dsm/dsm_accounts_new_account.html', context)
 
