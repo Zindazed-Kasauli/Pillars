@@ -358,13 +358,13 @@ def dsm_delete(request, action, id):
                 'pharmacy':batch_item.pharmacy,
                 'date':date
                 }) 
-                return render(request, 'dsm/dsm_stock_add_stock_item.html',{
+                return render(request, 'dsm/dsm_stock_give_out_stock.html',{
                     "batchForm":batchForm,
                     "batch":StockBatch.objects.filter(Q(invoice_number = 'give_out') & Q(pharmacy = batch_item.pharmacy)& Q(destination = destination)),
                     })
             else:
                 batchForm = StockBatchForm()
-                return render(request, 'dsm/dsm_stock_add_stock_item.html',{
+                return render(request, 'dsm/dsm_stock_give_out_stock.html',{
                     "batchForm":batchForm,
                     "itemForm":itemForm,
                     })

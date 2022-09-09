@@ -29,5 +29,6 @@ urlpatterns = [
     #dispenser urls
     path('disp_stock/<slug:action>', views_disp.disp_stock, name="disp_stock"),
     path('disp_reports/<slug:action>', views_disp.disp_reports, name="disp_reports"),
-    path('disp_prescription/<slug:action>', views_disp.disp_prescription, name="disp_prescription")  
+    path('disp_prescription/<slug:action>', views_disp.disp_prescription, name="disp_prescription"),
+    path('disp_delete/<slug:action>/<int:id>', views_disp.disp_delete, name="disp_delete"),
 ]

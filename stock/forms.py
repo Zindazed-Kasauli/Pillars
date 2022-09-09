@@ -42,8 +42,21 @@ class StockBatchForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
       super(StockBatchForm, self).__init__(*args, **kwargs)
       self.fields['stock_item'].queryset = self.fields['stock_item'].queryset.order_by('name')
+      the_fields = ('invoice_number', 'quantity', 'expiry_date', 'amount','date','pharmacy','unit_pack','stock_item','destination')
+      for key in the_fields:
+        self.fields[key].widget.attrs.update(
+      {'class': 'form-control'}
+    )
       
 class StockItemForm(forms.ModelForm):
   class Meta:
     model = StockItem
     fields = ('name', 'strength', 'drug_type', 'cat1_price')
+    
+  def __init__(self, *args, **kwargs):
+    super(StockItemForm, self).__init__(*args, **kwargs)
+    the_fields = ('name', 'strength', 'drug_type', 'cat1_price')    
+    for key in the_fields:
+      self.fields[key].widget.attrs.update(
+    {'class': 'form-control'}
+  )

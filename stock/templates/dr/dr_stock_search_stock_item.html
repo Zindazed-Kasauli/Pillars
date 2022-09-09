@@ -52,6 +52,26 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+                <form action="{% url 'dr_stock' 'search_stock_item' %}" method="get">
+                    <input type="search" name="search" id="search">
+                    <input type="submit" value="Search">
+                  </form>
+                  <table class=" table table-responsive">
+                    <tr>
+                      <th>Name</th>
+                      <th>Strength</th>
+                      <th>Description</th>
+                      <th>Quantity</th>
+                    </tr>
+                    {% for item in items %}
+                    <tr>
+                      <td>{{item.name}}</td>
+                      <td>{{item.strength}}</td>
+                      <td>{{item.drug_type}}</td>
+                      <td>{{item.dispensary_quantity}}</td>
+                    </tr>
+                    {%endfor%}
+                  </table>
             </div>
             <!-- end of page content -->
         </div>
