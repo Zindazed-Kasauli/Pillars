@@ -1,0 +1,1 @@
+web: gunicorn pillars.wsgi --log-file -
