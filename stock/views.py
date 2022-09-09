@@ -3,38 +3,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
 # home page view
+
 def index(request):
     #redirects user to login if not logged in
     if not request.user.is_authenticated:
-        return redirect('login')
-    form = UserCreationForm()
-    context = {'form':form}
-    #redirects user to the home page
-    return render(request, "dsm/dsm_accounts_new_account.html",context)
-
-# registration page view
-def register(request):
-    if request.method == 'POST':
-        #userCreationForm is a default registration form for creating new user
-        form = UserCreationForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-
-            #authenticates user
-            user = authenticate(username=username, password=password)
-
-            #logins in user
-            login(request, user)
-
-            #redirects user to home page
-            return redirect('index')
-    else:
-        #nothing happens
-        form = UserCreationForm()
-    
-    context = {'form':form}
-    return render(request, 'dsm/dsm_accounts_new_account.html', context)
+        return redirect('login2')
+    elif request.user.first_name == "Drug Store Manager":
+        return redirect('dsm_stock',"add_stock_item")
+    elif request.user.first_name == "Doctor":
+        return redirect('dr_stock','search_stock_item')
+    elif request.user.first_name == "Dispenser":
+        return redirect('disp_stock','request_stock')
 

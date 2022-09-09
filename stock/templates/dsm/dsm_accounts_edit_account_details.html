@@ -21,7 +21,7 @@
         <!-- log out -->
         <div class=" text-center">
             <h3>{{request.user.username}}</h3>
-            <a href="{% url 'logout' %}?next=/" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+            <a href="{% url 'logout' %}?next=/"><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
             <!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
         </div>
     </nav>
@@ -42,37 +42,54 @@
 
                     <!-- side bar items -->
                     <li class="nav-item">
-                    <a href="{% url 'dsm_accounts' 'new_account' %}" class="nav-link active" style="background: #009099;" aria-current="page">
-                    New Account
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{% url 'dsm_accounts' 'edit_account' %}" class="nav-link text-white">
-                    Edit Account
-                    </a>
-                    </li>
+                        <a href="{% url 'dsm_accounts' 'new_account' %}" class="nav-link text-white">
+                        New Account
+                        </a>
+                        </a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="{% url 'dsm_accounts' 'edit_account' %}" class="nav-link active" style="background: #009099;" aria-current="page">
+                        Edit Account
+                        </a>
+                        </a>
+                        </li>
                 </ul>
             </div>
             <!-- end of sidebar -->
 
             <!-- page content -->
             <div class="col-10 bg-light">
-                <h1>page content goes here</h1>
-                <form action="{% url 'dsm_accounts' 'new_account' %}" method="post">
+
+                <h3>Change User Credentials</h3>
+                <form action="{% url 'dsm_account' 'edit_account' user.id %}" method="post">
                     {% csrf_token %}
-            
-                    <p>Username: {{form.username}} </p>
-                    <p>Enter password: {{form.password1}} </p>
-                    <p>Confirm password: {{form.password2}} </p>
+                    <p>Username: <input type="text" name="username" value="{{user.username}}" id="username"> </p>
+                    <p>Confirm current password: {{form2.old_password}} </p>
+                    <p>Enter new password: {{form2.new_password1}} </p>
+                    <p>Confirm new password: {{form2.new_password2}} </p>
             
                     <h4>Account Type:</h4>
+                    {%if user.first_name == "Doctor"%}
+                    <input type="radio" name="role" value="Doctor" id="dr" required checked><label for="dr">Doctor</label><br>
+                    {%else%}
                     <input type="radio" name="role" value="Doctor" id="dr" required><label for="dr">Doctor</label><br>
+                    {%endif%}
+                    {%if user.first_name == "Drug Store Manager"%}
+                    <input type="radio" name="role" value="Drug Store Manager" id="dsm" checked><label for="dsm">Drug Store Manager</label><br>
+                    {%else%}
                     <input type="radio" name="role" value="Drug Store Manager" id="dsm"><label for="dsm">Drug Store Manager</label><br>
+                    {%endif%}
+                    {%if user.first_name == "Dispenser"%}
+                    <input type="radio" name="role" value="Dispenser" id="disp" checked><label for="disp">Dispernser</label><br>
+                    {%else%}
                     <input type="radio" name="role" value="Dispenser" id="disp"><label for="disp">Dispernser</label><br>
-                    <button type="submit">Register</button>
+                    {%endif%}
+                    <button type="submit" class="btn btn-dark text-light">Change</button>
                     
-                    {% if form.errors %}
+                    {% if form.errors or form2.errors %}
                     <h4 class="text-danger">Fix this and try again:</h4>
+                    {%endif%}
+                    {% if form.errors %}
                     <ol class="text-danger">
                         {% for field in form %}
                             {% for error in field.errors %}
@@ -81,6 +98,19 @@
                         {% endfor %}
                     </ol>
                     {%endif%}
+                    {% if form2.errors %}
+                    <ol class="text-danger">
+                        {% for field in form2 %}
+                            {% for error in field.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ol>
+                    {%endif%}
+                </form>
+                <br><br>
+                <form action="{% url 'dsm_delete' 'user' user.id %}" method="get">
+                    <button type="submit" class=" btn btn-danger" onclick="return confirm('Are you sure you want to delete this account?');">Delete</button>
                 </form>
             </div>
             <!-- end of page content -->

@@ -19,7 +19,8 @@
         </div>
 
         <!-- log out -->
-        <div class="">
+        <div class=" text-center">
+            <h3>{{request.user.username}}</h3>
             <a href="{% url 'logout' %}?next=/" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
             <!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
         </div>
@@ -58,7 +59,28 @@
 
             <!-- page content -->
             <div class="col-10 bg-light">
-                <h1>page content goes here</h1>
+                {% if added == "added" %}
+                    <h4 class=" text-success">Registered Successfully</h4>
+                {% elif added == "changed" %}
+                    <h4 class=" text-success">Edited Successfully</h4>
+                {% endif %}
+                <table>
+                    <tr>
+                        <th>Username</th>
+                        <th>Account Type</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for user in users %}
+                    <tr>
+                        
+                            <td><a href="{% url 'dsm_account' 'edit_account' user.id %}">{{user.username}}</a></td>
+                            <td>{{user.first_name}}</td>
+                        <td><form action="{% url 'dsm_delete' 'user' user.id %}" method="get">
+                            <button type="submit" class=" btn btn-danger" onclick="return confirm('Are you sure you want to delete this account?');">Delete</button>
+                        </form></td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
             <!-- end of page content -->
         </div>

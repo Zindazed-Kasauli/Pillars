@@ -19,8 +19,9 @@
 		</div>
 
 		<!-- log out -->
-		<div class="">
-			<a href="" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+		<div class=" text-center">
+      <h3>{{request.user.username}}</h3>
+			<a href="{% url 'logout' %}?next=/" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
 			<!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
 		</div>
 	</nav>
@@ -83,6 +84,42 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+                <form action="{% url 'dsm_stock' 'stock_batches' %}" method="get">
+                  <select name="batch_type" id="batch_type">
+                    <option value="added">Added Items</option>
+                    <option value="requested">Requested Items</option>
+                    <option value="given_out">Given Out Items</option>
+                    <option value="adjusted">Adjusted Items</option>
+                    <option value="lost">Lost Items</option>
+                    <option value="dispensed">Dispensed Items</option>
+                  </select>
+                  <input type="submit" value="Retrieve">
+                </form>
+
+                <table>
+                  <tr>
+                    <th>Date</th>
+                    <th>Item</th>
+                    <th>Invoice_number</th>
+                    <th>Unit Pack</th>
+                    <th>Pack Quantity</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>by</th>
+                  </tr>
+                  {% for item in batch %}
+                  <tr>
+                    <td>{{item.date}}</td>
+                    <td>{{item.stock_item}}</td>
+                    <td>{{item.invoice_number}}</td>
+                    <td>{{item.unit_pack}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.pharmacy}}</td>
+                    <td>{{item.destination}}</td>
+                    <td>{{item.account}}</td>
+                  </tr>
+                  {%endfor%}
+                </table>
             </div>
             <!-- end of page content -->
         </div>

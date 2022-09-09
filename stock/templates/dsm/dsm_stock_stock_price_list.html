@@ -19,8 +19,9 @@
 		</div>
 
 		<!-- log out -->
-		<div class="">
-			<a href="" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+		<div class=" text-center">
+      <h3>{{request.user.username}}</h3>
+			<a href="{% url 'logout' %}?next=/" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
 			<!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
 		</div>
 	</nav>

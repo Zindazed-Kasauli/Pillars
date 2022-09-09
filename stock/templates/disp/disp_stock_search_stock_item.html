@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% load static %}
+    {% load static %} 
+    {% load library %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,8 +20,9 @@
         </div>
 
         <!-- log out -->
-        <div class="">
-            <a href="" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+        <div class=" text-center">
+          <h3>{{request.user.username}}</h3>
+            <a href="{% url 'logout' %}?next=/" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
             <!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
         </div>
     </nav>
@@ -72,6 +74,33 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+
+                <form action="{% url 'disp_stock' 'search_stock' %}" method="get">
+                  <input type="search" name="search" id="search">
+                  <input type="submit" value="Search">
+                </form>
+                <table>
+                  <tr>
+                    <th>Name</th>
+                    <th>Strength</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Cat 3 price</th>
+                    <th>Cat 2 price</th>
+                    <th>Cat 1 price</th>
+                  </tr>
+                  {% for item in items %}
+                  <tr>
+                    <td>{{item.name}}</td>
+                    <td>{{item.strength}}</td>
+                    <td>{{item.type}}</td>
+                    <td>{{item.dispensary_quantity}}</td>
+                    <td>{{item.cat1_price|mult:3}}</td>
+                    <td>{{item.cat1_price|mult:1.5}}</td>
+                    <td>{{item.cat1_price|mult:1}}</td>
+                  </tr>
+                  {%endfor%}
+                </table>
             </div>
             <!-- end of page content -->
         </div>

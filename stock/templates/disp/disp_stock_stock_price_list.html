@@ -17,10 +17,10 @@
             <a class="nav-link" href="{% url 'disp_reports' 'reports' %}"><button class="btn  btn-lg me-2 text-white" type="button" style="background:#1D242E; width: 160px;">REPORTS</button></a>
             <a class="nav-link" href="{% url 'disp_prescription' 'prescription' %}"><button class="btn  btn-lg text-white" type="button" style="background:#1D242E; width: 160px;">PRESCRIPTION</button></a>
         </div>
-
         <!-- log out -->
-        <div class="">
-            <a href="" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
+        <div class=" text-center">
+          <h3>{{request.user.username}}</h3>
+            <a href="{% url 'logout' %}?next=/" ><button class="btn btn-sm bg-danger text-white">LogOut</button></a>
             <!-- <button type="submit" class="btn btn-danger nav navbar" >Logout</button> -->
         </div>
     </nav>
