@@ -21,55 +21,68 @@ class StockItem(models.Model):
 
 class StockBatch(models.Model):
     invoice_number = models.CharField(max_length=300)
+    store_quantity = models.IntegerField(default=0)
+    dispensary_quantity = models.IntegerField(default=0)
     quantity = models.IntegerField()
     expiry_date = models.DateField(null=True, blank=True)
-    amount = models.FloatField()
+    amount = models.IntegerField()
     date = models.DateField()
     pharmacy = models.CharField(max_length=200)
-    destination = models.CharField(max_length=200)
+    destination = models.CharField(max_length=200, null=True, blank=True)
     unit_pack = models.IntegerField()
     stock_item = models.ForeignKey("StockItem", related_name="stockBatch_stock_items", on_delete=models.CASCADE) #stock_batch has stock_item
     account = models.ForeignKey(User, related_name="stockBatch_accounts", on_delete=models.CASCADE) #account enters stock_item
+    prescription = models.ForeignKey("Prescription", related_name="prescription_stock_batch", on_delete=models.CASCADE, null=True, blank=True)#stock_item receives Prescription
+    dispensation_payment = models.ManyToManyField("DispensationPayment", related_name="stock_items",blank=True) #account enters stock_item
+    dosages = models.ForeignKey("Dosage", related_name="stock_items", on_delete=models.CASCADE, null=True, blank=True) #dosage is an attribute of the relationship, stockItem receives prescription
 
+    
     def __str__(self):
         return self.invoice_number
         pass
 
 class Prescription(models.Model):
-    bill = models.FloatField()
+    date = models.DateField()
+    bill = models.IntegerField()
+    balance = models.IntegerField()
+    stashed_amount = models.IntegerField(default=0)
+    category = models.IntegerField()
+    patient = models.CharField(max_length=200)
     account = models.ForeignKey(User, related_name="prescription_accounts", on_delete=models.CASCADE) #account/user enters prescription
-    patient = models.ForeignKey("Patient", related_name="prescription_patients", on_delete=models.CASCADE) #patient has prescription
+    # patient = models.ForeignKey("Patient", related_name="prescription_patients", on_delete=models.CASCADE) #patient has prescription
     # account = models.ForeignKey(User, related_name="prescription_accounts", on_delete=models.CASCADE) #account(dispenser) enter prescription
 
     def __str__(self):
-        return self.bill
+        return f"{self.bill}"
         pass
 
 class Dosage(models.Model):
-    dosage = models.CharField(max_length=200)
-    stock_batch = models.ForeignKey("StockBatch", related_name="dosage_stock_batches", on_delete=models.CASCADE) #dosage is an attribute of the relationship, stockItem receives prescription
+    quantity = models.IntegerField()
+    frequency = models.IntegerField()
+    unit_cost = models.IntegerField()
+    details = models.CharField(max_length=200)
     prescription = models.ForeignKey("Prescription", related_name="dosage_prescriptions", on_delete=models.CASCADE) 
 
     def __str__(self):
-        return self.dosage
+        return f'{self.details}'
         pass
 
 class DispensationPayment(models.Model):
     date = models.DateField()
-    amount = models.FloatField()
+    amount = models.IntegerField()
     remarks = models.CharField(max_length=200)
     account = models.ForeignKey(User, related_name="dispensation_accounts", on_delete=models.CASCADE) #account(dispenser) dispenses dispensation_payment
-    prescription = models.ForeignKey("Prescription", related_name="dispensation_prescriptions", on_delete=models.CASCADE) #prescription has dispensation_payments
-    patient = models.ForeignKey("Patient", related_name="dispensation_patients", on_delete=models.CASCADE) #patient makes dispensation payment
+    prescription = models.ForeignKey("Prescription", related_name="dispensation_prescriptions", on_delete=models.CASCADE,null=True,blank=True) #prescription has dispensation_payments
+    # patient = models.ForeignKey("Patient", related_name="dispensation_patients", on_delete=models.CASCADE) #patient makes dispensation payment
 
     def __str__(self):
-        return self.amount
+        return f"{self.amount}"
         pass
 
-class Patient(models.Model):
-    name = models.CharField(max_length=200)
-    account = models.ForeignKey(User, related_name="patients_accounts", on_delete=models.CASCADE) #account(dispenser) enters patient
+# class Patient(models.Model):
+#     name = models.CharField(max_length=200)
+#     account = models.ForeignKey(User, related_name="patients_accounts", on_delete=models.CASCADE) #account(dispenser) enters patient
 
-    def __str__(self):
-        return self.name
-        pass
+#     def __str__(self):
+#         return self.name
+#         pass

@@ -63,6 +63,32 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+                <form class="" action="{% url 'dsm_reports' 'periodic_reports' %}" method="post">
+                    {% csrf_token %}
+                    <label for="start">Start-Date: </label><input class=" form-control-sm" type="date" name="start" id="start" required>
+                    <label for="stop">Stop-Date: </label><input class=" form-control-sm" type="date" name="stop" id="stop" required>
+                    <input class=" btn btn-success" type="submit" value="View Report">
+                </form>
+                {%if items %}
+                <table class=" table table-responsive">
+                    <tr>
+                        <th>item</th>
+                        <th>Start Quantity</th>
+                        <th>Quantity Received</th>
+                        <th>Quantity Taken</th>
+                        <th>End Quantity</th>
+                    </tr>
+                    {%for item in items%}
+                    <tr>
+                        <td>{{item.item}}</td>
+                        <td>{{item.start}}</td>
+                        <td>{{item.quantity_received}}</td>
+                        <td>{{item.quantity_taken}}</td>
+                        <td>{{item.stop}}</td>
+                    </tr>
+                    {%endfor%}
+                </table>
+                {%endif%}
             </div>
             <!-- end of page content -->
         </div>

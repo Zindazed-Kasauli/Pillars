@@ -58,6 +58,77 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+                <table class=" table table-responsive">
+                    <tr>
+                        <td>Patient Name:</td>
+                        <td>{{bill.patient}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bill:</td>
+                        <td>UGX {{bill.bill}}</td>
+                    </tr>
+                    <tr>
+                        <td>Balance:</td>
+                        <td>UGX {{bill.balance}}</td>
+                    </tr>
+                    <tr>
+                        <td>Stashed:</td>
+                        <td>UGX {{bill.stashed_amount}}</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount Paid</th>
+                        <th>Remarks</th>
+                    </tr>
+                    <form action="{% url 'disp_prescription_details' 'prescription' bill.id %}" method="post">
+                        {% csrf_token %}
+                    <tr>
+                        <td><input type="date" name="date" id="date" class=" form-control" required></td>
+                        <td><input type="number" name="amount_paid" id="amount_paid" class=" form-control" required></td>
+                        <td><input type="text" name="remarks" id="remarks" class=" form-control" required></td>
+                        <td><input type="submit" value="Pay" class=" btn btn-success"></td>
+                    </tr>
+                    </form>
+                </table>
+
+                {%if batch %}
+                <h3>Amount Paid: {{batch.first.dispensation_payment.first}}</h3>
+                <table class=" table table-responsive">
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Strength</th>
+                    <th>Drug Type</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Dosage</th>
+                    <th>Details</th>
+                    <th>Action</th>
+                  </tr>
+                  {%for item in batch%}
+                  <tr>
+                    <td>{{item.date}}</td>
+                    <td>{{item.stock_item.name}}</td>
+                    <td>{{item.stock_item.strength}}</td>
+                    <td>{{item.stock_item.drug_type}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.amount}}</td>
+                    {%if item.dosages.frequency %}
+                    <td>{{item.dosages.quantity}} X {{item.dosages.frequency}}</td>
+                    {%else%}
+                    <td>in Details</td>
+                    {%endif%}
+                    <td>{{item.dosages.details}}</td>
+                    <td><form action="{% url 'disp_delete' 'batchItem' item.id %}" method="get">
+                      <button type="submit" class=" btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                </form></td>
+                  </tr>
+                  {%endfor%}
+                </table>
+                {%endif%}
             </div>
             <!-- end of page content -->
         </div>

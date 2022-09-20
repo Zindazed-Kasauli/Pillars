@@ -58,6 +58,34 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+
+                <form action="{% url 'disp_prescription' 'prescriptions' %}" method="get">
+                  <input type="search" name="search" id="search">
+                  <input type="submit" value="Search">
+                </form>
+
+                <table class=" table table-responsive">
+                    <tr>
+                      <th>Date</th>
+                      <th>Patient</th>
+                      <th>Bill</th>
+                      <th>Balance</th>
+                      <th>Category</th>
+                      <th>Action</th>
+                    </tr>
+                    {%for prescription in batch%}
+                    <tr>
+                      <td>{{prescription.date}}</td>
+                      <td><a href="{% url 'disp_prescription_details' 'prescription' prescription.id %}">{{prescription.prescription_stock_batch.first.destination}}</a></td>
+                      <td>{{prescription.bill}}</td>
+                      <td>{{prescription.balance}}</td>
+                      <td>{{prescription.category}}</td>
+                      <td><form action="{% url 'disp_delete' 'bill' prescription.id %}" method="get">
+                        <button type="submit" class=" btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                  </form></td>
+                    </tr>
+                    {%endfor%}
+                  </table>
             </div>
             <!-- end of page content -->
         </div>

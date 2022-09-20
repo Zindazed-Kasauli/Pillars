@@ -63,6 +63,24 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+                <table class=" table table-responsive">
+                    <tr>
+                        <th>item</th>
+                        <th>Start Quantity</th>
+                        <th>Quantity Received</th>
+                        <th>Quantity Taken</th>
+                        <th>End Quantity</th>
+                    </tr>
+                    {%for item in items%}
+                    <tr>
+                        <td>{{item.item}}</td>
+                        <td>{{item.start}}</td>
+                        <td>{{item.quantity_received}}</td>
+                        <td>{{item.quantity_taken}}</td>
+                        <td>{{item.stop}}</td>
+                    </tr>
+                    {%endfor%}
+                </table>
             </div>
             <!-- end of page content -->
         </div>

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Password
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from .forms import *
-from django.db.models import Q
+from django.db.models import Q, Sum, F
 from datetime import datetime
 
 #drug store manager stock_views 
@@ -21,7 +21,25 @@ def dsm_stock(request, action):
             item.save()
         return render(request, 'dsm/dsm_stock_search_stock_item.html',{'items':items})
     elif action == "requisitions":
-        return render(request, 'dsm/dsm_stock_requisitions.html')
+        message = ""
+        if request.method == "POST":
+            item_id = int(request.POST['item_id'])
+            item = StockBatch.objects.get(id = item_id)
+            if item.amount == 0:
+                item.stock_item.dispensary_quantity += item.unit_pack * item.quantity
+                item.stock_item.store_quantity -= item.unit_pack * item.quantity
+                item.stock_item.save()
+                item.dispensary_quantity = item.stock_item.dispensary_quantity
+                item.store_quantity = item.stock_item.store_quantity
+                item.amount = 1
+                item.save()
+                message = f"{item.stock_item} request accepted"
+            else:
+                message = f"{item.stock_item} request was already accepted"
+        return render(request, 'dsm/dsm_stock_requisitions.html',{
+                    "batch":StockBatch.objects.filter(Q(invoice_number = 'requisition') & Q(pharmacy = "Drug Store")& Q(destination = 'Dispensary')& Q(amount = 0)),
+                    "message":message,
+                    })
     elif action == "give_out_stock":
         if request.method == "POST":
             form = StockBatchForm(request.POST)
@@ -30,9 +48,10 @@ def dsm_stock(request, action):
                 if not StockBatch.objects.filter(Q(invoice_number = batch['invoice_number']) & Q(pharmacy = batch['pharmacy'])& Q(destination = batch['destination']) & Q(stock_item = batch['stock_item'])).exists():
                     batch = form.save(commit=False)
                     batch.account = request.user
-                    batch.save()
                     form.cleaned_data['stock_item'].store_quantity -= form.cleaned_data['unit_pack'] * form.cleaned_data['quantity']
                     form.cleaned_data['stock_item'].save()
+                    batch.store_quantity = form.cleaned_data['stock_item'].store_quantity
+                    batch.save()
                     batch = form.cleaned_data
                     message = f"{batch['stock_item']} given out"
                 else:
@@ -87,9 +106,10 @@ def dsm_stock(request, action):
                 if not StockBatch.objects.filter(Q(invoice_number = batch['invoice_number']) & Q(pharmacy = batch['pharmacy'])& Q(destination = batch['destination']) & Q(stock_item = batch['stock_item'])).exists():
                     batch = form.save(commit=False)
                     batch.account = request.user
-                    batch.save()
                     form.cleaned_data['stock_item'].store_quantity += form.cleaned_data['unit_pack'] * form.cleaned_data['quantity']
                     form.cleaned_data['stock_item'].save()
+                    batch.store_quantity = form.cleaned_data['stock_item'].store_quantity
+                    batch.save()
                     batch = form.cleaned_data
                     message = f"{batch['stock_item']} added"
                 else:
@@ -118,9 +138,10 @@ def dsm_stock(request, action):
                 if not StockBatch.objects.filter(Q(invoice_number = batch['invoice_number']) & Q(pharmacy = batch['pharmacy'])& Q(destination = batch['destination']) & Q(stock_item = batch['stock_item'])).exists():
                     batch = form.save(commit=False)
                     batch.account = request.user
-                    batch.save()
                     form.cleaned_data['stock_item'].store_quantity -= form.cleaned_data['unit_pack'] * form.cleaned_data['quantity']
                     form.cleaned_data['stock_item'].save()
+                    batch.store_quantity = form.cleaned_data['stock_item'].store_quantity
+                    batch.save()
                     batch = form.cleaned_data
                     message = f"{batch['stock_item']} removed as loss"
                 else:
@@ -172,6 +193,7 @@ def dsm_stock(request, action):
                 if not StockItem.objects.filter(Q(name = form.cleaned_data["name"]) & Q(strength = form.cleaned_data["strength"]) & Q(drug_type = form.cleaned_data["drug_type"])).exists():
                     item = form.save(commit=False)
                     item.account = request.user
+                    item.destination = "Drug Store"
                     item.save()
                     message = f"{item.name} added successfully"
                 else:
@@ -209,9 +231,10 @@ def dsm_stock(request, action):
                     batch = form.save(commit=False)
                     batch.account = request.user
                     batch.destination = "Drug Store"
-                    batch.save()
                     form.cleaned_data['stock_item'].store_quantity += form.cleaned_data['unit_pack'] * form.cleaned_data['quantity']
                     form.cleaned_data['stock_item'].save()
+                    batch.store_quantity = form.cleaned_data['stock_item'].store_quantity                    
+                    batch.save()
                     batch = form.cleaned_data
                     message = f"{batch['stock_item']} added to the batch"
                 else:
@@ -240,11 +263,60 @@ def dsm_stock(request, action):
 #drug store manager report_views
 def dsm_reports(request, action):
     if action == "periodic_reports":
+        if request.method == 'POST':
+            start = request.POST['start']
+            stop = request.POST['stop']
+            items = []
+            
+            if start<=stop:
+                for stock_item in StockItem.objects.all():
+                    if StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = stop)).exclude(Q(pharmacy = 'Dispensary')).order_by('-date').exists():
+                        item = dict()
+                        item['item'] = stock_item
+                        if StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = start)).exclude(Q(pharmacy = 'Dispensary')).order_by('-date').exists():
+                            item['start'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = start)).exclude(Q(pharmacy = 'Dispensary')).order_by('-date').first().store_quantity
+                        else:
+                            item['start'] = 0
+                        item['stop'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = stop)).exclude(Q(pharmacy = 'Dispensary')).order_by('-date').first().store_quantity
+                        try:
+                            item['quantity_received'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = stop) & Q(date__gte = start)).exclude(Q(pharmacy = 'Dispensary') | Q(invoice_number = 'requisition')| Q(invoice_number = 'give_out')| Q(invoice_number = 'loss')).aggregate(total=Sum(F('quantity') * F('unit_pack')))['total']
+                        except AttributeError:
+                            item['quantity_received'] = 0
+                        try:
+                            item['quantity_taken'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = stop) & Q(date__gte = start) & (Q(invoice_number = 'requisition')| Q(invoice_number = 'give_out')| Q(invoice_number = 'loss'))).exclude(Q(pharmacy = 'Dispensary')).aggregate(total=Sum(F('quantity') * F('unit_pack')))['total']
+                        except AttributeError:
+                            item['quantity_taken'] = 0
+                        items.append(item)
+                        
+            return render(request, 'dsm/dsm_reports_periodic_reports.html',{'items':items})
         return render(request, 'dsm/dsm_reports_periodic_reports.html')
     elif action == "notifications":
-        return render(request, 'dsm/dsm_reports_notifications.html')
+        green = StockItem.objects.filter(Q(store_quantity__lte = 100) & Q(store_quantity__gt = 40))
+        yellow = StockItem.objects.filter(Q(store_quantity__lte = 40) & Q(store_quantity__gt = 5))
+        red = StockItem.objects.filter(Q(store_quantity__lte = 5))
+        return render(request, 'dsm/dsm_reports_notifications.html',{
+            'green':green,
+            'yellow':yellow,
+            'red':red,
+        })
     elif action == "daily_report" or action == "reports":
-        return render(request, 'dsm/dsm_reports_daily_report.html')
+        items = []
+        for stock_item in StockItem.objects.all():
+            if StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = datetime.today().date())& Q(date__gte = datetime.today().date())).exclude(Q(pharmacy = 'Dispensary')).order_by('-date').exists():
+                item = dict()
+                item['item'] = stock_item
+                item['start'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = datetime.today().date())& Q(date__gte = datetime.today().date())).exclude(Q(pharmacy = 'Dispensary')).order_by('date').first().store_quantity
+                item['stop'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = datetime.today().date())& Q(date__gte = datetime.today().date())).exclude(Q(pharmacy = 'Dispensary')).order_by('-date').first().store_quantity
+                try:
+                    item['quantity_received'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = datetime.today().date()) & Q(date__gte = datetime.today().date())).exclude(Q(pharmacy = 'Dispensary') | Q(invoice_number = 'requisition')| Q(invoice_number = 'give_out')| Q(invoice_number = 'loss')).aggregate(total=Sum(F('quantity') * F('unit_pack')))['total']
+                except AttributeError:
+                    item['quantity_received'] = 0
+                try:
+                    item['quantity_taken'] = StockBatch.objects.filter(Q(stock_item = stock_item) & Q(date__lte = datetime.today().date()) & Q(date__gte = datetime.today().date()) &( Q(invoice_number = 'requisition')| Q(invoice_number = 'give_out')| Q(invoice_number = 'loss'))).exclude(Q(pharmacy = 'Dispensary')).aggregate(total=Sum(F('quantity') * F('unit_pack')))['total']
+                except AttributeError:
+                    item['quantity_taken'] = 0
+                items.append(item)
+        return render(request, 'dsm/dsm_reports_daily_report.html',{'items':items})
     else:
         pass
 

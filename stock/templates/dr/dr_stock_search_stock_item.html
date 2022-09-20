@@ -61,7 +61,8 @@
                       <th>Name</th>
                       <th>Strength</th>
                       <th>Description</th>
-                      <th>Quantity</th>
+                      <th>Quantity in Dispensary</th>
+                      <th>Quantity in store</th>
                     </tr>
                     {% for item in items %}
                     <tr>
@@ -69,6 +70,7 @@
                       <td>{{item.strength}}</td>
                       <td>{{item.drug_type}}</td>
                       <td>{{item.dispensary_quantity}}</td>
+                      <td>{{item.store_quantity}}</td>
                     </tr>
                     {%endfor%}
                   </table>

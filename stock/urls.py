@@ -25,10 +25,13 @@ urlpatterns = [
     #doctor urls
     path('dr_stock/<slug:action>', views_dr.dr_stock, name="dr_stock"),
     path('dr_prescription/<slug:action>', views_dr.dr_prescription, name="dr_prescription"),
+    path('dr_prescription_details/<slug:action>/<int:id>', views_dr.dr_prescription_details, name="dr_prescription_details"),
+
 
     #dispenser urls
     path('disp_stock/<slug:action>', views_disp.disp_stock, name="disp_stock"),
     path('disp_reports/<slug:action>', views_disp.disp_reports, name="disp_reports"),
     path('disp_prescription/<slug:action>', views_disp.disp_prescription, name="disp_prescription"),
+    path('disp_prescription_details/<slug:action>/<int:id>', views_disp.disp_prescription_details, name="disp_prescription_details"),
     path('disp_delete/<slug:action>/<int:id>', views_disp.disp_delete, name="disp_delete"),
 ]

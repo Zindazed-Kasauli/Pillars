@@ -18,4 +18,19 @@ def dr_stock(request, action):
 #doctor prescriptions
 def dr_prescription(request, action):
     if action == "prescriptions":
-        return render(request, 'dr/dr_prescription_prescriptions.html')
+        if request.method == "GET":
+            search = request.GET.get("search","")
+            batch = Prescription.objects.filter(patient__icontains = search).order_by("-date")
+        else:
+            batch = Prescription.objects.order_by("-date")        
+        return render(request, 'dr/dr_prescription_prescriptions.html',{'batch':batch})
+
+def dr_prescription_details(request, action, id):
+    if action == "bill_prescription" or action == "prescription":
+        bill = Prescription.objects.get(Q(id = id))
+        batch = StockBatch.objects.filter(Q(prescription = bill) & Q(invoice_number = "Prescription"))
+                
+        return render(request, 'dr/dr_prescription_prescription_view.html',{
+            "bill":bill,
+            "batch":batch,
+        })

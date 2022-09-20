@@ -83,6 +83,39 @@
             <!-- page content -->
             <div class="col-10 bg-light">
                 <h1>page content goes here</h1>
+
+                {%if message %}
+					      <h6 class=" text-info">{{message}}</h6>
+				        {%endif%}
+        
+                {%if batch %}
+                <table class=" table table-responsive">
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Strength</th>
+                    <th>Drug Type</th>
+                    <th>Unit Pack</th>
+                    <th>Pack Quantity</th>
+                    <th>Action</th>
+                  </tr>
+                  {%for item in batch%}
+                  <tr>
+                    <td>{{item.date}}</td>
+                    <td>{{item.stock_item.name}}</td>
+                    <td>{{item.stock_item.strength}}</td>
+                    <td>{{item.stock_item.drug_type}}</td>
+                    <td>{{item.unit_pack}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td><form action="{% url 'dsm_stock' 'requisitions' %}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="item_id" value="{{item.id}}">
+                      <button type="submit" class=" btn btn-danger" onclick="return confirm('Are you sure you want to accept this request?');">Accept</button>
+                                </form></td>
+                  </tr>
+                  {%endfor%}
+                </table>
+                {%endif%}
             </div>
             <!-- end of page content -->
         </div>
